@@ -1,6 +1,5 @@
 package com.ruangmain.cirle.controllers;
 
-import com.ruangmain.cirle.dto.auth.RegisteredUserDto;
 import com.ruangmain.cirle.libs.jwt.JwtUtil;
 import com.ruangmain.cirle.models.User;
 import com.ruangmain.cirle.services.FollowService;
@@ -28,16 +27,20 @@ public class FollowController {
         return ResponseEntity.ok(service.add(user, id));
     }
 
-    @GetMapping("/total-following")
-    public ResponseEntity<Integer> findTotalFollowing(HttpServletRequest request) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id, HttpServletRequest request) {
         var user = jwtUtil.getUser(request);
-        return ResponseEntity.ok(service.findTotalFollowing(user));
+        return ResponseEntity.ok(service.delete(user, id));
     }
 
-    @GetMapping("/total-followers")
-    public ResponseEntity<Integer> findTotalFollowers(HttpServletRequest request) {
-        var user = jwtUtil.getUser(request);
-        return ResponseEntity.ok(service.findTotalFollowers(user));
+    @GetMapping("/total-following/{id}")
+    public ResponseEntity<Integer> findTotalFollowing(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findTotalFollowing(id));
+    }
+
+    @GetMapping("/total-followers/{id}")
+    public ResponseEntity<Integer> findTotalFollowers(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findTotalFollowers(id));
     }
 
     @GetMapping("/suggested-accounts")

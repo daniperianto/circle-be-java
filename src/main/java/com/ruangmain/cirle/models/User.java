@@ -35,6 +35,18 @@ public class User implements UserDetails {
     @Builder.Default
     private String background_image = "https://images.unsplash.com/photo-1524893829393-a74a8c51c635?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Thread> threads;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
+    private List<Follow> following;
+
+    @OneToMany(mappedBy = "followers", cascade = CascadeType.ALL)
+    private List<Follow> followers;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

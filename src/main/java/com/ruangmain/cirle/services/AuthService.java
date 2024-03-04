@@ -23,7 +23,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
 
-    public String register(RegisterRequestDto request) {
+    public AuthResponseDto register(RegisterRequestDto request) {
         var user = User.builder()
                 .fullname(request.getFullname())
                 .username("@" + request.getFullname())
@@ -32,7 +32,11 @@ public class AuthService {
                 .role(Role.User)
                 .build();
         repository.save(user);
-        return jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user);
+        return AuthResponseDto.builder()
+                .token(jwtToken)
+                .registeredUser(userMapper.mapTo(user))
+                .build();
     }
 
     public AuthResponseDto loginByEmail(String email, String password) {

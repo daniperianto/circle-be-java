@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
-@Log4j2
 public class AuthController {
 
     private final AuthService service;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<AuthResponseDto> register(
             @RequestBody RegisterRequestDto request) {
         return ResponseEntity.ok(service.register(request));
     }

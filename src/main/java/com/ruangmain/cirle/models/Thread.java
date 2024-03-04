@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Builder
@@ -20,11 +21,14 @@ public class Thread implements Serializable {
     @SequenceGenerator(name = "custom-seq", sequenceName = "threads_id_seq", allocationSize = 1)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     private String image;
     private String content;
     private Date created_at = new Date();
+
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    private List<Like> likes;
 }

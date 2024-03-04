@@ -29,17 +29,26 @@ public class FollowService {
         return "success";
     }
 
-    public Integer findTotalFollowing(User user) {
-        return repository.countByFollowing(user);
+    public String delete(User user, Long id) {
+        var following = userRepository.findById(id).orElseThrow();
+        Follow follow = Follow.builder()
+                .followers(user)
+                .following(following).build();
+        repository.delete(follow);
+        return "success";
     }
 
-    public Integer findTotalFollowers(User user) {
-        return repository.countByFollowers(user);
+    public Integer findTotalFollowing(Long id) {
+        return repository.countByFollowing(id);
+    }
+
+    public Integer findTotalFollowers(Long id) {
+        return repository.countByFollowers(id);
     }
 
     public List<User> findSuggestedAccounts(Long userId) {
         var userIds = repository.findSuggestedAccountsId(userId);
-        return findUsers(userIds);
+        return findUsers(userIds.stream().filter(id -> !id.equals(userId)).toList());
     }
 
     public List<User> findFollowing(User user) {
