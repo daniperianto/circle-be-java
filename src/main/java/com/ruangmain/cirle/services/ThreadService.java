@@ -4,6 +4,7 @@ import com.ruangmain.cirle.dto.thread.ThreadDto;
 import com.ruangmain.cirle.dto.thread.ThreadRequestDto;
 import com.ruangmain.cirle.libs.cloudinary.CloudinaryService;
 import com.ruangmain.cirle.mapper.impl.ThreadMapper;
+import com.ruangmain.cirle.mapper.impl.UserMapper;
 import com.ruangmain.cirle.models.Thread;
 import com.ruangmain.cirle.models.User;
 import com.ruangmain.cirle.repositories.ThreadRepository;
@@ -24,19 +25,22 @@ public class ThreadService {
     private final UserRepository userRepository;
     private final CloudinaryService cloudinary;
     private final ThreadMapper mapper;
+    private final UserMapper userMapper;
 
     public String add(ThreadRequestDto request, User user) {
+        var image = request.getImage() == null ? null : cloudinary.uploadFile(request.getImage());
         var thread = Thread.builder()
                 .user(user)
                 .content(request.getContent())
-                .image(cloudinary.uploadFile(request.getImage()))
+                .image(image)
                 .build();
         repository.save(thread);
         return "success";
     }
 
-    public List<Thread> findAll() {
+    public List<ThreadDto> findAll() {
         return StreamSupport.stream(repository.findAll().spliterator(), true)
+                .map(mapper::mapTo)
                 .collect(Collectors.toList());
     }
 
@@ -49,8 +53,10 @@ public class ThreadService {
         return repository.findByUser(user);
     }
 
-    public Iterable<Thread> findByFollowing(User user) {
-        return repository.findByFollowing(user);
+    public List<ThreadDto> findByFollowing(User user) {
+        return StreamSupport.stream(repository.findByFollowing(user).spliterator(), true)
+                .map(mapper::mapTo)
+                .collect(Collectors.toList());
     }
 
 

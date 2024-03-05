@@ -3,12 +3,15 @@ package com.ruangmain.cirle.controllers;
 import com.ruangmain.cirle.dto.auth.AuthResponseDto;
 import com.ruangmain.cirle.dto.auth.LoginDto;
 import com.ruangmain.cirle.dto.auth.RegisterRequestDto;
+import com.ruangmain.cirle.dto.auth.UserDto;
 import com.ruangmain.cirle.models.User;
 import com.ruangmain.cirle.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -52,5 +55,10 @@ public class AuthController {
     @GetMapping("/{id}")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/search/{account}")
+    public ResponseEntity<List<UserDto>> search(@PathVariable String account) {
+        return ResponseEntity.ok(service.search(account));
     }
 }

@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisteredUserDto {
+public class UserDto {
 
     private Long id;
     private String username;
@@ -18,4 +20,5 @@ public class RegisteredUserDto {
     private String photo_profile;
     private String background_image;
     private String bio;
+    private Date created_at;
 }

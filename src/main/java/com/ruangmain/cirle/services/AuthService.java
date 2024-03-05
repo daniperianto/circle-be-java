@@ -2,6 +2,7 @@ package com.ruangmain.cirle.services;
 
 import com.ruangmain.cirle.dto.auth.AuthResponseDto;
 import com.ruangmain.cirle.dto.auth.RegisterRequestDto;
+import com.ruangmain.cirle.dto.auth.UserDto;
 import com.ruangmain.cirle.libs.jwt.JwtService;
 import com.ruangmain.cirle.mapper.impl.UserMapper;
 import com.ruangmain.cirle.models.Role;
@@ -12,6 +13,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,5 +68,10 @@ public class AuthService {
 
     public User findById(Long id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    public List<UserDto> search(String account) {
+        List<User> users = repository.search(account);
+        return users.stream().map(userMapper::mapTo).toList();
     }
 }

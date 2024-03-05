@@ -1,5 +1,6 @@
 package com.ruangmain.cirle.controllers;
 
+import com.ruangmain.cirle.dto.auth.UserDto;
 import com.ruangmain.cirle.libs.jwt.JwtUtil;
 import com.ruangmain.cirle.models.User;
 import com.ruangmain.cirle.services.FollowService;
@@ -44,19 +45,19 @@ public class FollowController {
     }
 
     @GetMapping("/suggested-accounts")
-    public ResponseEntity<List<User>> findSuggestedAccounts(HttpServletRequest request) {
+    public ResponseEntity<List<UserDto>> findSuggestedAccounts(HttpServletRequest request) {
         User user = jwtUtil.getUser(request);
         return ResponseEntity.ok(service.findSuggestedAccounts(user.getId()));
     }
 
     @GetMapping("/get-following")
-    public ResponseEntity<List<User>> findFollowing(HttpServletRequest request) {
+    public ResponseEntity<List<UserDto>> findFollowing(HttpServletRequest request) {
         User user = jwtUtil.getUser(request);
         return ResponseEntity.ok(service.findFollowing(user));
     }
 
     @GetMapping("/get-followers")
-    public ResponseEntity<List<User>> findFollowers(HttpServletRequest request) {
+    public ResponseEntity<List<UserDto>> findFollowers(HttpServletRequest request) {
         User user = jwtUtil.getUser(request);
         return ResponseEntity.ok(service.findFollowers(user));
     }

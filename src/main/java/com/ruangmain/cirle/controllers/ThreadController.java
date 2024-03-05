@@ -28,18 +28,17 @@ public class ThreadController {
     @PostMapping(value = "/add")
     public ResponseEntity<String> add(
             HttpServletRequest request,
-            @RequestParam("content") String content,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam(required = false,name = "content") String content,
+            @RequestParam(required = false,name = "image") MultipartFile image) {
         var user = jwtUtil.getUser(request);
-        var threadRequest = ThreadRequestDto.builder()
-                .content(content)
-                .image(image)
-                .build();
+        var threadRequest = new ThreadRequestDto();
+        if(!content.isEmpty()) threadRequest.setContent(content);
+        if(image != null) threadRequest.setImage(image);
         return ResponseEntity.ok(service.add(threadRequest, user));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Thread>> findAll() {
+    public ResponseEntity<List<ThreadDto>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
@@ -54,7 +53,7 @@ public class ThreadController {
     }
 
     @GetMapping("/following")
-    public ResponseEntity<Iterable<Thread>> findByFollowing(HttpServletRequest request) {
+    public ResponseEntity<List<ThreadDto>> findByFollowing(HttpServletRequest request) {
         var user = jwtUtil.getUser(request);
         return ResponseEntity.ok(service.findByFollowing(user));
     }

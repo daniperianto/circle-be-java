@@ -1,5 +1,7 @@
 package com.ruangmain.cirle.services;
 
+import com.ruangmain.cirle.dto.auth.UserDto;
+import com.ruangmain.cirle.mapper.impl.UserMapper;
 import com.ruangmain.cirle.models.Follow;
 import com.ruangmain.cirle.models.User;
 import com.ruangmain.cirle.repositories.FollowRepository;
@@ -9,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +18,7 @@ public class FollowService {
 
     private final FollowRepository repository;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public String add(User user, Long id) {
         var following = userRepository.findById(id).orElseThrow();
@@ -46,17 +47,17 @@ public class FollowService {
         return repository.countByFollowers(id);
     }
 
-    public List<User> findSuggestedAccounts(Long userId) {
+    public List<UserDto> findSuggestedAccounts(Long userId) {
         var userIds = repository.findSuggestedAccountsId(userId);
         return findUsers(userIds.stream().filter(id -> !id.equals(userId)).toList());
     }
 
-    public List<User> findFollowing(User user) {
+    public List<UserDto> findFollowing(User user) {
         var userIds = repository.findFollowing(user.getId());
         return findUsers(userIds);
     }
 
-    public List<User> findFollowers(User user) {
+    public List<UserDto> findFollowers(User user) {
         var userIds = repository.findFollowers(user.getId());
         return findUsers(userIds);
     }
@@ -66,12 +67,13 @@ public class FollowService {
         return count == 1;
     }
 
-    private List<User> findUsers(Iterable<Long> ids) {
-        return StreamSupport.stream(ids.spliterator(), false)
+    private List<UserDto> findUsers(List<Long> ids) {
+        return ids.stream()
                 .map(userRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toList());
+                .map(userMapper::mapTo)
+                .toList();
     }
 
 

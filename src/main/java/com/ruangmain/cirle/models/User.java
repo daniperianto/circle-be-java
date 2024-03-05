@@ -1,17 +1,20 @@
 package com.ruangmain.cirle.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -35,7 +38,16 @@ public class User implements UserDetails {
     @Builder.Default
     private String background_image = "https://images.unsplash.com/photo-1524893829393-a74a8c51c635?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
+    @CreatedDate
+    @Builder.Default
+    private Date created_at = new Date();
+
+    @LastModifiedDate
+    @Builder.Default
+    private Date updated_at = new Date();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Thread> threads;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

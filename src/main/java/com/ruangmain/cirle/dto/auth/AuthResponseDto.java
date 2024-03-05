@@ -11,6 +11,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthResponseDto {
 
-    private RegisteredUserDto registeredUser;
+    private UserDto registeredUser;
     private String token;
 }
